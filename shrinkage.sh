@@ -14,10 +14,8 @@
 
 find . -name "*.mp4" -exec bash -c 'for MPEG in "$1" ;
   do
-
     ffmpeg -i "$MPEG" -vcodec libx265 -crf 28 "${MPEG%.mp4}(SHRUNK).mp4";
     mkdir -p "${MPEG%/*}/trash"
     mv "$MPEG" "${MPEG%/*}/trash"
-
   done
 ' none {} \;
