@@ -14,8 +14,9 @@
 
 find . -name "*.mp4" -exec bash -c 'for MPEG in "$1" ;
   do
-    ffmpeg -i "$MPEG" -vcodec libx265 -crf 28 "${MPEG%.mp4}(SHRUNK).mp4";
-    mkdir -p "${MPEG%/*}/trash"
-    mv "$MPEG" "${MPEG%/*}/trash"
+    ffmpeg -y -i "$MPEG" -vcodec libx265 -crf 28 "${MPEG%.mp4}(SHRUNK).mp4";
+    mkdir -p "${MPEG%/*/*}/unShrunk${MPEG%/*}"
+    mv "$MPEG" "${MPEG%/*/*}/unShrunk${MPEG%/*}" 
+    # echo "${MPEG%/*/*}/unShrunk${MPEG%/*}"
   done
 ' none {} \;
