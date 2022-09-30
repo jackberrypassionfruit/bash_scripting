@@ -1,22 +1,20 @@
-# Great for looping inside a single directory, but we need to go deeper...
-# for MPEG in *.mp4; do
-#   ffmpeg -i "$MPEG" -vcodec libx265 -crf 28 "new-$MPEG";
-#   # echo $MPEG
-# done
 
-# This one is making $MPEG each WORD in each string, and that's wrong
-# for MPEG in `find . -name "*.mp4"`; do
-#   # ffmpeg -i "$MPEG" -vcodec libx265 -crf 28 "new-$MPEG";
-#   echo "${MPEG}"
-# done
+# Shrinkage - takes a nested directory of files and runs all of the *.mp4 files through ffmpeg in order to reduce their file size. Feel free to adopt the parameters for your own use or shoot me a questions about the the looping for "find ... -exec "
 
-# YES! using the exec flag in find is the ticket, because it's smarter about strings I guess
+# format " sh ./shrinkage.sh filetype depth"
+# note: depth = 0 for unshrunk folder in same directory. +1 for every level up
 
-find . -name "*.mp4" -exec bash -c 'for MPEG in "$1" ;
+find . -name "*.$1" -exec bash -c 'for file in "$1" ;
   do
-    ffmpeg -y -i "$MPEG" -vcodec libx265 -crf 28 "${MPEG%.mp4}(SHRUNK).mp4";
-    mkdir -p "${MPEG%/*/*}/unShrunk${MPEG%/*}"
-    mv "$MPEG" "${MPEG%/*/*}/unShrunk${MPEG%/*}" 
-    # echo "${MPEG%/*/*}/unShrunk${MPEG%/*}"
+    ffmpeg -y -i "$file" -vcodec libx265 -crf 28 "${file%.mp4}(SHRUNK).mp4";
+    depth=""
+    nest="/*"
+    for i in {0..'$2'}; do
+      depth+="$nest";
+    done
+    
+    mkdir -p "${file%$depth}/unShrunk${file%/*}"
+    mv "$file" "${file%$depth}/unShrunk${file%/*}" 
+
   done
 ' none {} \;
