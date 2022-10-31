@@ -17,10 +17,11 @@ find . -name "*.$1" -exec bash -c 'for file in "$1" ;
     afterUnShrunk=${afterUnShrunk#.}
     shrunkDir="${file%$depth}/unShrunk$afterUnShrunk"
 
-    # echo $shrunkDir
+    echo "file is $file"
+    echo "shrunkDir is $shrunkDir"
     
     mkdir -p "${shrunkDir%\.}"
-    mv "$file" ${shrunkDir%\.} 
+    mv "$file" "${shrunkDir%\.}"
 
   done
 ' none {} \;
