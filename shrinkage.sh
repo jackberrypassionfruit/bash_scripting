@@ -13,9 +13,13 @@ find . -name "*.$1" -exec bash -c 'for file in "$1" ;
       depth+="$nest";
     done
 
-    shrunkDir="${file%$depth}/unShrunk${file%/*}"
+    afterUnShrunk="${file%/*}"
+    afterUnShrunk=${afterUnShrunk#.}
+    shrunkDir="${file%$depth}/unShrunk$afterUnShrunk"
+
+    # echo $shrunkDir
     
-    mkdir -p ${shrunkDir%\.}
+    mkdir -p "${shrunkDir%\.}"
     mv "$file" ${shrunkDir%\.} 
 
   done
