@@ -6,7 +6,7 @@
 
 find . -name "*.$1" -exec bash -c 'for file in "$1" ;
   do
-    ffmpeg -y -i "$file" -vcodec libx265 -crf 28 "${file%.mp4}(SHRUNK).mp4";
+    ffmpeg -y -i "$file" -vcodec libx265 -crf 28 -c:s mov_text -metadata:s:s:0 language=en "${file%.mp4}(SHRUNK).mp4";
     depth=""
     nest="/*"
     for i in {0..'$2'}; do
